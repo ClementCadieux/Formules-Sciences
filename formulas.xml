@@ -20,9 +20,9 @@
 	    <var name="U" unit="v" text="U"/>
       <var name="I" unit="A" text="I"/>
 	    <var name="P" unit="W" text="P"/>
-	    <function name="U" equation="P/I"/>
-    	<function name="I" equation="P/U"/>
-     	<function name="P" equation="U*I"/>
+	    <function name="U" equation="P/I"  text=""/>
+    	<function name="I" equation="P/U" text=""/>
+     	<function name="P" equation="U*I" text=""/>
     </formula>
     <formula name="Énergie par rapport au temps">
 	    <var name="E" unit="j" text="E"/>
