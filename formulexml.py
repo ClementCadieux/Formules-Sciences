@@ -57,7 +57,9 @@ lvar = list_variables(formula_node, searched_variable)
 s_equation = get_equation(formula_node, searched_variable)
 svar_unit = get_unit(formula_node, searched_variable)
 avar = get_attrib(root, "name", "var")
+avar.sort()
 tvar = get_attrib(root, "text", "var")
+tvar.sort()
 tequation = get_attrib(root, "text", "function")
 
 for qvar in lvar.items():
