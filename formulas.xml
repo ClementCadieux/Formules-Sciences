@@ -41,11 +41,7 @@
     </formula>
     <formula name="Best Rap Ever">
       <var name="m" unit="g" text="m"/>
-<<<<<<< HEAD
       <var name="dT" unit=" degree Celsius" text="ΔT"/>
-=======
-      <var name="dT" unit="degree Celsius" text="ΔT"/>
->>>>>>> bd42a9f68601565c45f9c54543684c8a0d305324
       <var name="Q" unit="J" text="Q"/>
       <var name="c" unit="J/(g*°C)" text="c"/>
       <function name="Q" equation="m*c*dT" text="Q=m⋅c⋅ΔT"/>
