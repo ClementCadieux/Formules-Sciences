@@ -25,7 +25,7 @@ def get_unit (fnode, svar):
     unit_node = fnode.find('./var[@name="' + svar + '"]')
     return (unit_node.attrib.get('unit'))
 
-def attrib_var (fnode, attribute, stype):
+def get_attrib (fnode, attribute, stype):
     list_attribute_var = []
     for child in fnode.iter(stype):
         var_attribute = str(child.attrib.get(attribute))
@@ -56,9 +56,9 @@ while (formula_node == 0):
 lvar = list_variables(formula_node, searched_variable)
 s_equation = get_equation(formula_node, searched_variable)
 svar_unit = get_unit(formula_node, searched_variable)
-avar = attrib_var(root, "name", "var")
-tvar = attrib_var(root, "text", "var")
-tequation = attrib_var(root, "text", "function")
+avar = get_attrib(root, "name", "var")
+tvar = get_attrib(root, "text", "var")
+tequation = get_attrib(root, "text", "function")
 
 for qvar in lvar.items():
     qvar_unit = get_unit(formula_node, qvar[0])
