@@ -31,11 +31,9 @@ def get_equation (fnode, svar):
 def reset():
     all_widgets = main.grid_slaves()
     for widget in all_widgets:
-        if(widget.config("text")[-1] != "What are you searching? " and widget != formula and widget.config("text")[-1] != " "):
-            widget.destroy()
-    next_step = Button(main, text="Next", command=get_formula, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=1, column=1, sticky=W, pady=4)
-    history = Button(main, text="Previous answers", command=showHistory, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=0, column=10, sticky=W, pady=4)
-    formula.delete(0, END)
+        widget.destroy()
+    history = Button(main, text="Previous answers", command=showHistory, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=0, column=20, sticky=W, padx=20)
+    showVarList()
 
 def reset_error_msg():
     all_widgets = main.grid_slaves()
@@ -49,20 +47,28 @@ def get_unit (fnode, svar):
 
 def showHistory():
     iterator=1
-    Label(main, text="  PREVIOUS ANSWERS", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=4)
+    Label(main, text="PREVIOUS ANSWERS", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=20, padx=20)
     global lastVariables
     while(len(lastVariables) > 5):
         del(lastVariables[0])
     for i in lastVariables:
-        Label(main, text=i, font="Consolas 10", bg="#c2d1e8").grid(row=iterator, column=4)
+        Label(main, text=i, font="Consolas 10", bg="#c2d1e8").grid(row=iterator, column=20)
         iterator+=1
     all_widgets = main.grid_slaves()
     for widget in all_widgets:
         if(widget.config("text")[-1] == "Previous answers"):
             widget.destroy()
 
-def selectEquation(btnText):
-    searched_variable = formula.get()
+def get_attrib (fnode, attribute, stype):
+    list_attribute_var = []
+    for child in fnode.iter(stype):
+        var_attribute = str(child.attrib.get(attribute))
+        if(var_attribute not in list_attribute_var):
+            list_attribute_var.append(var_attribute)
+    return list_attribute_var
+
+def selectEquation(btnText, argVar):
+    searched_variable = argVar
     items = formula_search(root, searched_variable)
     selected_equation = btnText[0]
     formula_node = items[int(selected_equation) - 1]
@@ -71,11 +77,10 @@ def selectEquation(btnText):
 
     all_widgets = main.grid_slaves()
     for widget in all_widgets:
-        if(widget.config("text")[-1] != "What are you searching? " and widget != formula and widget.config("text")[-1] != " "):
-            widget.destroy()
-    history = Button(main, text="Previous answers", command=showHistory, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=0, column=10, sticky=W, pady=4)
+        widget.destroy()
+    history = Button(main, text="Previous answers", command=showHistory, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=0, column=20, sticky=W, padx=20)
 
-    i = 1
+    i = 0
     textBoxes = []
     for qvar in lvar.items():
         qvar_unit = get_unit(formula_node, qvar[0])
@@ -116,26 +121,27 @@ def selectEquation(btnText):
 
     show_ans = Button(main, text='Show answer', command=show_answer, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=i + 1, column=1, sticky=W, pady=4)
 
-def get_formula():
+def get_formula(argVar):
     reset_error_msg()
     all_widgets = main.grid_slaves()
     for widget in all_widgets:
-        if(widget.config("text")[-1] == "Next"):
-            widget.destroy()
+        widget.destroy()
 
-    searched_variable = formula.get()
+    history = Button(main, text="Previous answers", command=showHistory, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=0, column=20, sticky=W, padx=20)
+
+    searched_variable = argVar
     items = formula_search(root, searched_variable)
 
     if (len(items) == 0):
-        varError = Label(main, text = "We don't have the formula to find that variable...", fg="red", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
-        next_step = Button(main, text="Next", command=get_formula, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=1, column=1, sticky=W, pady=4)
-
+        varError = Label(main, text = "We don't have the formula to find that variable...", fg="red", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=10)
+        showVarList()
+        
     elif(len(items) == 1):
         formula_node = items[0]
         svar_unit = get_unit(formula_node, searched_variable)
         lvar = list_variables(formula_node, searched_variable) 
 
-        i = 2
+        i = 0
         textBoxes = []
         for qvar in lvar.items():
             qvar_unit = get_unit(formula_node, qvar[0])
@@ -177,28 +183,36 @@ def get_formula():
         show_ans = Button(main, text='Show answer', command=show_answer, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=i + 1, column=1, sticky=W, pady=4)
     
     elif(len(items) > 1):
-        i3 = 1
+        i3 = 0
         for i in range(0, len(items)):            
             s_equation = get_equation(items[i], searched_variable)
             text = str(i + 1) + " - " + s_equation
-            equation = Button(main, text=text, command=lambda s=text: selectEquation(s), font="Consolas 10", borderwidth=3, relief="ridge")
-            equation.grid(row=i3, column=1, sticky=W, pady=4)
+            equation = Button(main, text=text, command=lambda s=text: selectEquation(s, argVar), font="Consolas 10", borderwidth=3, relief="ridge", width=30)
+            equation.grid(row=i3, column=1, sticky=W, pady=2)
             i3 += 1   
 
+def showVarList():
+    row = 0
+    col = 0
+    avar = get_attrib(root, "name", "var")
+    avar.sort()
+    for i in range(0, len(avar)):             
+        text = avar[i]
+        equation = Button(main, text=text, command=lambda s=text: get_formula(s), font="Consolas 10", borderwidth=3, relief="ridge", height=1, width=3)
+        equation.grid(row=row, column=col, sticky=W, pady=2, padx=2)
+        if(col > 4):
+            col = 0
+            row += 1
+        else:
+            col += 1
 
 #----------------------------------------------------------------------CREATING THE GUI----------------------------------------------------------------------
 main = Tk()
 main.title("Science Formulas")
 main.iconbitmap("icon.ico")
 
-question = Label(main, text = "What are you searching? ", font="Consolas 10", bg="#c2d1e8").grid(row=0)
-question = Label(main, text = " ", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=5)
-
-formula = Entry(main, font="Consolas 10", borderwidth=3, relief="sunken")
-formula.grid(row=0, column=1)
-
-next_step = Button(main, text="Next", command=get_formula, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=1, column=1, sticky=W, pady=4)
-history = Button(main, text="Previous answers", command=showHistory, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=0, column=10, sticky=W, pady=4)
+showVarList()
+history = Button(main, text="Previous answers", command=showHistory, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=0, column=20, sticky=W, padx=20)
 
 main.configure(background="#c2d1e8")
 
