@@ -12,9 +12,9 @@
       <var name="U" unit="v" text="U"/>
       <var name="R" unit="Ω" text="R"/>
       <var name="I" unit="A" text="I"/>
-      <function name="U" equation="R*I"/>
-      <function name="R" equation="U/I"/>
-      <function name="I" equation="U/R"/>
+      <function name="U" equation="R*I" text=""/>
+      <function name="R" equation="U/I" text=""/>
+      <function name="I" equation="U/R" text=""/>
    </formula>
    <formula name="Puissance électrique">
 	    <var name="U" unit="v" text="U"/>
