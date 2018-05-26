@@ -67,6 +67,10 @@ for qvar in lvar.items():
     lvar[qvar[0]] = float(input("What is the value of " + qvar[0] + " in " + qvar_unit + "?"))
     s_equation = s_equation.replace(qvar[0], str(lvar[qvar[0]]))
 
+print(avar)
+print(tvar)
+print(tequation)
+
 answer = eval(s_equation)
 
 if(answer >= 10000 or answer < 0.001):
