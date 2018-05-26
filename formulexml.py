@@ -2,6 +2,7 @@ from xml.etree import ElementTree as ET
 tree = ET.parse('formulas.xml')
 root = tree.getroot()
 
+
 import math
 
 from decimal import Decimal
@@ -50,13 +51,14 @@ while (formula_node == 0):
             print(str(i) + " " + s_equation)
         selected_equation = input("Which formula do you want? 0 - " + str(len(items) - 1))
         formula_node = items[int(selected_equation)]
-
+            
 
 lvar = list_variables(formula_node, searched_variable)
 s_equation = get_equation(formula_node, searched_variable)
 svar_unit = get_unit(formula_node, searched_variable)
 avar = attrib_var(root, "name", "var")
 tvar = attrib_var(root, "text", "var")
+tequation = attrib_var(root, "text", "function")
 
 for qvar in lvar.items():
     qvar_unit = get_unit(formula_node, qvar[0])
