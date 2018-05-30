@@ -26,12 +26,13 @@ def get_unit (fnode, svar):
     return (unit_node.attrib.get('unit'))
 
 def get_attrib (fnode, attribute, stype):
-    list_attribute_var = []
+    dict_attribute_var = {}
     for child in fnode.iter(stype):
+        var_name = str(child.attrib.get("name"))
         var_attribute = str(child.attrib.get(attribute))
-        if(var_attribute not in list_attribute_var):
-            list_attribute_var.append(var_attribute)
-    return list_attribute_var
+        if(var_name not in dict_attribute_var):
+            dict_attribute_var[var_name] = var_attribute
+    return dict_attribute_var
 
 #---------------------------------------------------------------
 
@@ -57,9 +58,7 @@ lvar = list_variables(formula_node, searched_variable)
 s_equation = get_equation(formula_node, searched_variable)
 svar_unit = get_unit(formula_node, searched_variable)
 avar = get_attrib(root, "name", "var")
-avar.sort()
 tvar = get_attrib(root, "text", "var")
-tvar.sort()
 tequation = get_attrib(root, "text", "function")
 
 for qvar in lvar.items():
