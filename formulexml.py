@@ -32,7 +32,7 @@ def get_attrib (fnode, attribute, stype):
         var_attribute = str(child.attrib.get(attribute))
         if(var_name not in dict_attribute_var):
             dict_attribute_var[var_name] = var_attribute
-    return dict_attribute_var
+    return (dict_attribute_var)
 
 #---------------------------------------------------------------
 
@@ -65,10 +65,6 @@ for qvar in lvar.items():
     qvar_unit = get_unit(formula_node, qvar[0])
     lvar[qvar[0]] = float(input("What is the value of " + qvar[0] + " in " + qvar_unit + "?"))
     s_equation = s_equation.replace(qvar[0], str(lvar[qvar[0]]))
-
-print(avar)
-print(tvar)
-print(tequation)
 
 answer = eval(s_equation)
 
