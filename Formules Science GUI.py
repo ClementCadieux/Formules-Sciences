@@ -99,8 +99,12 @@ def selectEquation(btnText, argVar):
             s_equation = get_equation(formula_node, searched_variable) 
             i2 = 0
             for qvar in lvar.items():
-                lvar[qvar[0]] = float(variables[i2])
+                lvar[qvar[0]] = variables[i2]
                 i2 += 1
+                if ("^" in lvar[qvar[0]]):
+                    lvar[qvar[0]] = lvar[qvar[0]].replace("^", "**")       
+                if ("E" in lvar[qvar[0]]):
+                    lvar[qvar[0]] = lvar[qvar[0]].replace("E", "* 10**")
                 s_equation = s_equation.replace(qvar[0], str(lvar[qvar[0]]))                 
         except:
             reset_error_msg()
@@ -160,8 +164,12 @@ def get_formula(argVar):
                 s_equation = get_equation(formula_node, searched_variable) 
                 i2 = 0
                 for qvar in lvar.items():
-                    lvar[qvar[0]] = float(variables[i2])
+                    lvar[qvar[0]] = variables[i2]
                     i2 += 1
+                    if ("^" in lvar[qvar[0]]):
+                        lvar[qvar[0]] = lvar[qvar[0]].replace("^", "**")       
+                    if ("E" in lvar[qvar[0]]):
+                        lvar[qvar[0]] = lvar[qvar[0]].replace("E", "* 10**")
                     s_equation = s_equation.replace(qvar[0], str(lvar[qvar[0]]))                 
             except:
                 reset_error_msg()
@@ -205,6 +213,7 @@ def showVarList():
             row += 1
         else:
             col += 1
+
 
 #----------------------------------------------------------------------CREATING THE GUI----------------------------------------------------------------------
 main = Tk()
