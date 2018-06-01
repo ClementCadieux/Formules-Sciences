@@ -63,7 +63,11 @@ tequation = get_attrib(root, "text", "function")
 
 for qvar in lvar.items():
     qvar_unit = get_unit(formula_node, qvar[0])
-    lvar[qvar[0]] = float(input("What is the value of " + qvar[0] + " in " + qvar_unit + "?"))
+    lvar[qvar[0]] = input("What is the value of " + qvar[0] + " in " + qvar_unit + "?")
+    if ("^" in lvar[qvar[0]]):
+        lvar[qvar[0]] = lvar[qvar[0]].replace("^", "**")       
+    if ("E" in lvar[qvar[0]]):
+        lvar[qvar[0]] = lvar[qvar[0]].replace("E", "* 10**")
     s_equation = s_equation.replace(qvar[0], str(lvar[qvar[0]]))
 
 answer = eval(s_equation)
