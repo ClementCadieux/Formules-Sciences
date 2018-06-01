@@ -25,13 +25,13 @@ def get_unit (fnode, svar):
     unit_node = fnode.find('./var[@name="' + svar + '"]')
     return (unit_node.attrib.get('unit'))
 
-def get_attrib (fnode, attribute, stype):
+def get_attrib (fnode, attribute, stype, key):
     dict_attribute_var = {}
     for child in fnode.iter(stype):
-        var_name = str(child.attrib.get("name"))
+        var_key = str(child.attrib.get(key))
         var_attribute = str(child.attrib.get(attribute))
-        if(var_name not in dict_attribute_var):
-            dict_attribute_var[var_name] = var_attribute
+        if(var_key not in dict_attribute_var):
+            dict_attribute_var[var_key] = var_attribute
     return (dict_attribute_var)
 
 #---------------------------------------------------------------
@@ -57,9 +57,12 @@ while (formula_node == 0):
 lvar = list_variables(formula_node, searched_variable)
 s_equation = get_equation(formula_node, searched_variable)
 svar_unit = get_unit(formula_node, searched_variable)
-avar = get_attrib(root, "name", "var")
-tvar = get_attrib(root, "text", "var")
-tequation = get_attrib(root, "text", "function")
+avar = get_attrib(root, "name", "var", "name")
+tvar = get_attrib(root, "text", "var", "name")
+text_to_name = get_attrib(root, "name", "var", "text")
+print(avar)
+print(tvar)
+print(text_to_name)
 
 for qvar in lvar.items():
     qvar_unit = get_unit(formula_node, qvar[0])
