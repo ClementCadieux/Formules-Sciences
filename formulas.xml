@@ -1,81 +1,83 @@
 ﻿<formulas>
-    <formula name="Force d'attraction entre 2 corps">
-      <var name="q1" unit="C" text="q1"/>
-      <var name="q2" unit="C" text="q2"/>
-      <var name="r" unit="m" text="r"/>
-      <var name="FE" unit="N" text="F.E."/>
-      <function name="FE" equation="((9*(10**9))*q1*q2)/(r**2)" text="F.E.=(k⋅q1⋅q2)÷(r^2)"/>
-      <function name="q" equation="(FE*(r**2))/(9*(10**9)*q2)" text="q1=(F.E.⋅r^2)÷(k⋅q2)"/>
-      <function name="r" equation="math.sqrt((9*(10**9)*q1*q2)/FE)" text="r=√((k⋅q1⋅q2)÷(F.E.))"/>
+  <sciences>
+      <formula name="Force d'attraction entre 2 corps">
+        <var name="q1" unit="C" text="q1"/>
+        <var name="q2" unit="C" text="q2"/>
+        <var name="r" unit="m" text="r"/>
+        <var name="FE" unit="N" text="F.E."/>
+        <function name="FE" equation="((9*(10**9))*q1*q2)/(r**2)" text="F.E.=(k⋅q1⋅q2)÷(r^2)"/>
+        <function name="q" equation="(FE*(r**2))/(9*(10**9)*q2)" text="q1=(F.E.⋅r^2)÷(k⋅q2)"/>
+        <function name="r" equation="math.sqrt((9*(10**9)*q1*q2)/FE)" text="r=√((k⋅q1⋅q2)÷(F.E.))"/>
+      </formula>
+    <formula name="Tension électrique">
+        <var name="U" unit="v" text="U"/>
+        <var name="R" unit="Ω" text="R"/>
+        <var name="I" unit="A" text="I"/>
+        <function name="U" equation="R*I" text="U=R⋅I"/>
+        <function name="R" equation="U/I" text="R=U÷I"/>
+        <function name="I" equation="U/R" text="I=U÷I"/>
     </formula>
-   <formula name="Tension électrique">
-      <var name="U" unit="v" text="U"/>
-      <var name="R" unit="Ω" text="R"/>
-      <var name="I" unit="A" text="I"/>
-      <function name="U" equation="R*I" text="U=R⋅I"/>
-      <function name="R" equation="U/I" text="R=U÷I"/>
-      <function name="I" equation="U/R" text="I=U÷I"/>
-   </formula>
-   <formula name="Puissance électrique">
-	    <var name="U" unit="v" text="U"/>
-      <var name="I" unit="A" text="I"/>
-	    <var name="P" unit="W" text="P"/>
-	    <function name="U" equation="P/I"  text="U=P÷I"/>
-    	<function name="I" equation="P/U" text="I=P÷U"/>
-     	<function name="P" equation="U*I" text="P=U⋅I"/>
+    <formula name="Puissance électrique">
+        <var name="U" unit="v" text="U"/>
+        <var name="I" unit="A" text="I"/>
+        <var name="P" unit="W" text="P"/>
+        <function name="U" equation="P/I"  text="U=P÷I"/>
+        <function name="I" equation="P/U" text="I=P÷U"/>
+        <function name="P" equation="U*I" text="P=U⋅I"/>
+      </formula>
+      <formula name="Énergie par rapport au temps">
+        <var name="E" unit="j" text="E"/>
+        <var name="dt" unit="s" text="Δt"/>
+        <var name="P" unit="W" text="P"/>
+        <function name="E" equation="P*dt" text="E=P⋅Δt"/>
+        <function name="dt" equation="E/P" text="Δt=E÷P"/>
+        <function name="P" equation="E/dt" text="P=E÷Δt"/>
+      </formula>
+      <formula name="Rapport Résistance-Conductance">
+        <var name="G" unit="S" text="G"/>
+        <var name="R" unit="Ω" text="R"/>
+        <function name="G" equation="R**-1" text="G=R^-1"/>
+        <function name="R" equation="G**-1" text="R=G^-1"/>
+      </formula>
+      <formula name="Best Rap Ever">
+        <var name="m" unit="g" text="m"/>
+        <var name="dT" unit="degree Celsius" text="ΔT"/>
+        <var name="Q" unit="j" text="Q"/>
+        <var name="c" unit="j/(g*°C)" text="c"/>
+        <function name="Q" equation="m*c*dT" text="Q=m⋅c⋅ΔT"/>
+        <function name="m" equation="Q/(c*dT)" text="m=Q÷(c⋅ΔT)"/>
+        <function name="dT" equation="Q/(c*m)" text="ΔT=Q÷(c⋅m)"/>
+        <function name="c" equation="Q/(m*dT)" text="c=Q÷(m⋅ΔT)"/>
+      </formula>
+      <formula name="Rapport entre la tension, l'énergie et la charge">
+        <var name="E" unit="j" text="E"/>
+        <var name="U" unit="v" text="U"/>
+        <var name="q" unit="C" text="q"/>
+        <function name="E" equation="U/q" text="E=U÷q"/>
+        <function name="U" equation="E*q" text="U=E⋅q"/>
+        <function name="q" equation="U/E" text="q=U÷E"/>
+      </formula>
+    <formula name="Rendement énergétique">
+        <var name="E" unit="j" text="E"/>
+        <var name="Re" unit="%" text="R.E."/>
+        <var name="Q" unit="j" text="Q"/>
+        <function name="E" equation="Q/(Re/100)" text="E=Q÷(R.E.÷100)"/>
+        <function name="Re" equation="(Q/E)*100" text="R.E.=(Q÷E)⋅100"/>
+        <function name="Q" equation="(Re/100)*E" text="Q=(R.E.÷100)⋅E"/>
+      </formula>
+    <formula name="Conversion Coulombs-Électrons">
+        <var name="q" unit="C" text="q"/>
+        <var name="Ne" unit="e-" text="Electrons"/>
+        <function name="q" equation="Ne/(6.242*10**18)" text="Electrons÷(6.242⋅10^18)"/>
+        <function name="Ne" equation="q*(6.242*10**18)" text="q⋅(6.242⋅10^18)"/>
     </formula>
-    <formula name="Énergie par rapport au temps">
-	    <var name="E" unit="j" text="E"/>
-	    <var name="dt" unit="s" text="Δt"/>
-      <var name="P" unit="W" text="P"/>
-	    <function name="E" equation="P*dt" text="E=P⋅Δt"/>
-      <function name="dt" equation="E/P" text="Δt=E÷P"/>
-      <function name="P" equation="E/dt" text="P=E÷Δt"/>
+    <formula name="Rapport Charge-Intensité-Temps">
+        <var name="I" unit="A" text="I"/>
+        <var name="q" unit="C" text="q"/>
+        <var name="dt" unit="s" text="Δt"/>
+        <function name="I" equation="q/dt" text="I=q÷Δt"/>
+        <function name="q" equation="I*dt" text="q=I⋅Δt"/>
+        <function name="dt" equation="q/I" text="Δt=q÷I"/>
     </formula>
-    <formula name="Rapport Résistance-Conductance">
-      <var name="G" unit="S" text="G"/>
-      <var name="R" unit="Ω" text="R"/>
-      <function name="G" equation="R**-1" text="G=R^-1"/>
-      <function name="R" equation="G**-1" text="R=G^-1"/>
-    </formula>
-    <formula name="Best Rap Ever">
-      <var name="m" unit="g" text="m"/>
-      <var name="dT" unit="degree Celsius" text="ΔT"/>
-      <var name="Q" unit="j" text="Q"/>
-      <var name="c" unit="j/(g*°C)" text="c"/>
-      <function name="Q" equation="m*c*dT" text="Q=m⋅c⋅ΔT"/>
-      <function name="m" equation="Q/(c*dT)" text="m=Q÷(c⋅ΔT)"/>
-      <function name="dT" equation="Q/(c*m)" text="ΔT=Q÷(c⋅m)"/>
-      <function name="c" equation="Q/(m*dT)" text="c=Q÷(m⋅ΔT)"/>
-    </formula>
-    <formula name="Rapport entre la tension, l'énergie et la charge">
-      <var name="E" unit="j" text="E"/>
-      <var name="U" unit="v" text="U"/>
-      <var name="q" unit="C" text="q"/>
-      <function name="E" equation="U/q" text="E=U÷q"/>
-      <function name="U" equation="E*q" text="U=E⋅q"/>
-      <function name="q" equation="U/E" text="q=U÷E"/>
-    </formula>
-  <formula name="Rendement énergétique">
-      <var name="E" unit="j" text="E"/>
-      <var name="Re" unit="%" text="R.E."/>
-      <var name="Q" unit="j" text="Q"/>
-      <function name="E" equation="Q/(Re/100)" text="E=Q÷(R.E.÷100)"/>
-      <function name="Re" equation="(Q/E)*100" text="R.E.=(Q÷E)⋅100"/>
-      <function name="Q" equation="(Re/100)*E" text="Q=(R.E.÷100)⋅E"/>
-    </formula>
-  <formula name="Conversion Coulombs-Électrons">
-      <var name="q" unit="C" text="q"/>
-      <var name="Ne" unit="e-" text="Electrons"/>
-      <function name="q" equation="Ne/(6.242*10**18)" text="Electrons÷(6.242⋅10^18)"/>
-      <function name="Ne" equation="q*(6.242*10**18)" text="q⋅(6.242⋅10^18)"/>
-  </formula>
-  <formula name="Rapport Charge-Intensité-Temps">
-      <var name="I" unit="A" text="I"/>
-      <var name="q" unit="C" text="q"/>
-      <var name="dt" unit="s" text="Δt"/>
-      <function name="I" equation="q/dt" text="I=q÷Δt"/>
-      <function name="q" equation="I*dt" text="q=I⋅Δt"/>
-      <function name="dt" equation="q/I" text="Δt=q÷I"/>
-  </formula>
+  </sciences>
 </formulas>
