@@ -32,7 +32,7 @@ def reset():
     all_widgets = main.grid_slaves()
     for widget in all_widgets:
         widget.destroy()
-    history = Button(main, text="Previous answers", command=showHistory, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=0, column=20, sticky=W, padx=20)
+    createHistoryButton()
     showVarList()
 
 def reset_error_msg():
@@ -47,7 +47,7 @@ def get_unit (fnode, svar):
 
 def showHistory():
     iterator=1
-    Label(main, text="PREVIOUS ANSWERS", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=20, padx=20)
+    Label(main, text="PREVIOUS ANSWERS", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=20, padx=15)
     global lastVariables
     while(len(lastVariables) > 5):
         del(lastVariables[0])
@@ -59,16 +59,18 @@ def showHistory():
         if(widget.config("text")[-1] == "Previous answers"):
             widget.destroy()
 
-def get_attrib (fnode, attribute, stype):
-    list_attribute_var = []
+def get_attrib (fnode, attribute, stype, key):
+    dict_attribute_var = {}
     for child in fnode.iter(stype):
+        var_key = str(child.attrib.get(key))
         var_attribute = str(child.attrib.get(attribute))
-        if(var_attribute not in list_attribute_var):
-            list_attribute_var.append(var_attribute)
-    return list_attribute_var
+        if(var_key not in dict_attribute_var):
+            dict_attribute_var[var_key] = var_attribute
+    return (dict_attribute_var)
 
 def selectEquation(btnText, argVar):
-    searched_variable = argVar
+    text_to_name = get_attrib(root, "name", "var", "text")
+    searched_variable = text_to_name[argVar]
     items = formula_search(root, searched_variable)
     selected_equation = btnText[0]
     formula_node = items[int(selected_equation) - 1]
@@ -78,7 +80,7 @@ def selectEquation(btnText, argVar):
     all_widgets = main.grid_slaves()
     for widget in all_widgets:
         widget.destroy()
-    history = Button(main, text="Previous answers", command=showHistory, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=0, column=20, sticky=W, padx=20)
+    createHistoryButton()
 
     i = 0
     textBoxes = []
@@ -117,11 +119,10 @@ def selectEquation(btnText, argVar):
             s_answer = str(round(ans, 2))
         string_answer = searched_variable + " has a value of " + s_answer + svar_unit
         label_answer = Label(main, text=string_answer, font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
-        reset_window = Button(main, text='Next variable', command=reset, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=i + 1, column=1, sticky=W, pady=4)
         global lastVariables
-        txtToAdd = searched_variable + " = " + s_answer + svar_unit
+        tvar = get_attrib(root, "text", "var", "name")
+        txtToAdd = tvar[searched_variable] + " = " + s_answer + svar_unit
         lastVariables.append(txtToAdd)
-        print(lastVariables)
 
     show_ans = Button(main, text='Show answer', command=show_answer, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=i + 1, column=1, sticky=W, pady=4)
 
@@ -131,9 +132,10 @@ def get_formula(argVar):
     for widget in all_widgets:
         widget.destroy()
 
-    history = Button(main, text="Previous answers", command=showHistory, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=0, column=20, sticky=W, padx=20)
+    createHistoryButton()
 
-    searched_variable = argVar
+    text_to_name = get_attrib(root, "name", "var", "text")
+    searched_variable = text_to_name[argVar]
     items = formula_search(root, searched_variable)
 
     if (len(items) == 0):
@@ -182,11 +184,10 @@ def get_formula(argVar):
                s_answer = str(round(ans, 2))
             string_answer = searched_variable + " has a value of " + s_answer + svar_unit
             label_answer = Label(main, text=string_answer, font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
-            reset_window = Button(main, text='Next variable', command=reset, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=i + 1, column=1, sticky=W, pady=4)
             global lastVariables
-            txtToAdd = searched_variable + " = " + s_answer + svar_unit
+            tvar = get_attrib(root, "text", "var", "name")
+            txtToAdd = tvar[searched_variable] + " = " + s_answer + svar_unit
             lastVariables.append(txtToAdd)
-            print(lastVariables)
 
         show_ans = Button(main, text='Show answer', command=show_answer, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=i + 1, column=1, sticky=W, pady=4)
     
@@ -202,17 +203,22 @@ def get_formula(argVar):
 def showVarList():
     row = 0
     col = 0
-    avar = get_attrib(root, "name", "var")
-    avar.sort()
-    for i in range(0, len(avar)):             
-        text = avar[i]
-        equation = Button(main, text=text, command=lambda s=text: get_formula(s), font="Consolas 10", borderwidth=3, relief="ridge", height=1, width=3)
+    tvar = get_attrib(root, "text", "var", "name")
+    del(tvar["q1"])
+    del(tvar["q2"])
+    for key, value in tvar.items():             
+        text = tvar[key]
+        equation = Button(main, text=text, command=lambda s=text: get_formula(s), font="Consolas 10", borderwidth=3, relief="ridge", height=1, width=10)
         equation.grid(row=row, column=col, sticky=W, pady=2, padx=2)
         if(col > 4):
             col = 0
             row += 1
         else:
             col += 1
+
+def createHistoryButton():
+    history = Button(main, text="Previous answers", command=showHistory, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=0, column=20, sticky=W, padx=15)
+    menu = Button(main, text="Main menu", command=reset, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=0, column=21, sticky=W)
 
 
 #----------------------------------------------------------------------CREATING THE GUI----------------------------------------------------------------------
@@ -221,7 +227,7 @@ main.title("Science Formulas")
 main.iconbitmap("icon.ico")
 
 showVarList()
-history = Button(main, text="Previous answers", command=showHistory, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=0, column=20, sticky=W, padx=20)
+createHistoryButton()
 
 main.configure(background="#c2d1e8")
 
