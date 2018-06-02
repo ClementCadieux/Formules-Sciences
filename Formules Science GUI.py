@@ -33,6 +33,10 @@ def reset():
     for widget in all_widgets:
         widget.destroy()
     createHistoryButton()
+    all_widgets = main.grid_slaves()
+    for widget in all_widgets:
+        if(widget.config("text")[-1] == "Main menu"):
+            widget.destroy()
     showVarList()
 
 def reset_error_msg():
@@ -193,8 +197,10 @@ def get_formula(argVar):
     
     elif(len(items) > 1):
         i3 = 0
-        for i in range(0, len(items)):            
+        for i in range(0, len(items)):
+            form = get_attrib(root, "text", "function", "equation")       
             s_equation = get_equation(items[i], searched_variable)
+            s_equation = form[s_equation]
             text = str(i + 1) + " - " + s_equation
             equation = Button(main, text=text, command=lambda s=text: selectEquation(s, argVar), font="Consolas 10", borderwidth=3, relief="ridge", width=30)
             equation.grid(row=i3, column=1, sticky=W, pady=2)
@@ -228,6 +234,10 @@ main.iconbitmap("icon.ico")
 
 showVarList()
 createHistoryButton()
+all_widgets = main.grid_slaves()
+for widget in all_widgets:
+    if(widget.config("text")[-1] == "Main menu"):
+         widget.destroy()
 
 main.configure(background="#c2d1e8")
 
