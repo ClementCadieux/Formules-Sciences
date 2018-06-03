@@ -60,9 +60,6 @@ svar_unit = get_unit(formula_node, searched_variable)
 avar = get_attrib(root, "name", "var", "name")
 tvar = get_attrib(root, "text", "var", "name")
 text_to_name = get_attrib(root, "name", "var", "text")
-print(avar)
-print(tvar)
-print(text_to_name)
 
 for qvar in lvar.items():
     qvar_unit = get_unit(formula_node, qvar[0])
