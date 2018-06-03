@@ -75,7 +75,7 @@ for qvar in lvar.items():
 
 answer = eval(s_equation)
 
-if(answer >= 10000 or answer < 0.001):
+if(answer >= 10000 or answer < 0.005):
     s_answer = '%.2E' % Decimal(answer)
 else:
     s_answer = str(round(answer, 2))
