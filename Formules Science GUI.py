@@ -5,13 +5,11 @@ from xml.etree import ElementTree as ET
 import re
 from decimal import Decimal
 
-
 #-----------------------------------------------------------------------MAIN VARIABLES-------------------------------------------------------------------------
 tree = ET.parse('formulas.xml')  
 root = tree.getroot()
 items = []
 lastVariables = []
-
 
 #-------------------------------------------------------------------------FUNCTIONS-------------------------------------------------------------------------
 def formula_search (doc, svar):
@@ -33,12 +31,13 @@ def reset():
     for widget in all_widgets:
         widget.destroy()
     createHistoryButton()
+    removeMenuBtn()
     showVarList()
 
 def reset_error_msg():
     all_widgets = main.grid_slaves()
     for widget in all_widgets:
-        if(widget.config("text")[-1] == "We don't have the formula to find that variable..." or widget.config("text")[-1] == "Please enter a number"):
+        if(widget.config("text")[-1] == "Please enter a number"):
             widget.destroy()
 
 def get_unit (fnode, svar):
@@ -93,36 +92,36 @@ def selectEquation(btnText, argVar):
         i += 1 
 
     def show_answer():
-        try:
-            reset_error_msg()
-            variables = []
-            for textBox in textBoxes:
-                variables.append(textBox.get())
-            s_equation = get_equation(formula_node, searched_variable) 
-            i2 = 0
-            for qvar in lvar.items():
-                lvar[qvar[0]] = variables[i2]
-                i2 += 1
-                if ("^" in lvar[qvar[0]]):
-                    lvar[qvar[0]] = lvar[qvar[0]].replace("^", "**")       
-                if ("E" in lvar[qvar[0]]):
-                    lvar[qvar[0]] = lvar[qvar[0]].replace("E", "* 10**")
-                s_equation = s_equation.replace(qvar[0], str(lvar[qvar[0]]))                 
+        reset_error_msg()
+        variables = []
+        for textBox in textBoxes:
+            variables.append(textBox.get())
+        s_equation = get_equation(formula_node, searched_variable) 
+        i2 = 0
+        for qvar in lvar.items():
+            lvar[qvar[0]] = variables[i2]
+            i2 += 1
+            if ("^" in lvar[qvar[0]]):
+                lvar[qvar[0]] = lvar[qvar[0]].replace("^", "**")       
+            if ("E" in lvar[qvar[0]]):
+                lvar[qvar[0]] = lvar[qvar[0]].replace("E", "* 10**")
+            s_equation = s_equation.replace(qvar[0], str(lvar[qvar[0]]))                 
+           
+        try: 
+            ans = eval(s_equation)
+            if(ans >= 10000 or ans < 0.001):
+                s_answer = '%.2E' % Decimal(ans)
+            else:
+                s_answer = str(round(ans, 2))
+            string_answer = searched_variable + " has a value of " + s_answer + svar_unit
+            label_answer = Label(main, text=string_answer, font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
+            global lastVariables
+            tvar = get_attrib(root, "text", "var", "name")
+            txtToAdd = tvar[searched_variable] + " = " + s_answer + svar_unit
+            lastVariables.append(txtToAdd)
         except:
             reset_error_msg()
             error = Label(main, text = "Please enter a number", fg="red", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3) 
-            
-        ans = eval(s_equation)
-        if(ans >= 10000 or ans < 0.001):
-            s_answer = '%.2E' % Decimal(ans)
-        else:
-            s_answer = str(round(ans, 2))
-        string_answer = searched_variable + " has a value of " + s_answer + svar_unit
-        label_answer = Label(main, text=string_answer, font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
-        global lastVariables
-        tvar = get_attrib(root, "text", "var", "name")
-        txtToAdd = tvar[searched_variable] + " = " + s_answer + svar_unit
-        lastVariables.append(txtToAdd)
 
     show_ans = Button(main, text='Show answer', command=show_answer, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=i + 1, column=1, sticky=W, pady=4)
 
@@ -137,12 +136,8 @@ def get_formula(argVar):
     text_to_name = get_attrib(root, "name", "var", "text")
     searched_variable = text_to_name[argVar]
     items = formula_search(root, searched_variable)
-
-    if (len(items) == 0):
-        varError = Label(main, text = "We don't have the formula to find that variable...", fg="red", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=10)
-        showVarList()
-        
-    elif(len(items) == 1):
+    
+    if(len(items) == 1):
         formula_node = items[0]
         svar_unit = get_unit(formula_node, searched_variable)
         lvar = list_variables(formula_node, searched_variable) 
@@ -158,43 +153,45 @@ def get_formula(argVar):
             i += 1   
         
         def show_answer():
-            try:
-                reset_error_msg()
-                variables = []
-                for textBox in textBoxes:
-                    variables.append(textBox.get())
-                s_equation = get_equation(formula_node, searched_variable) 
-                i2 = 0
-                for qvar in lvar.items():
-                    lvar[qvar[0]] = variables[i2]
-                    i2 += 1
-                    if ("^" in lvar[qvar[0]]):
-                        lvar[qvar[0]] = lvar[qvar[0]].replace("^", "**")       
-                    if ("E" in lvar[qvar[0]]):
-                        lvar[qvar[0]] = lvar[qvar[0]].replace("E", "* 10**")
-                    s_equation = s_equation.replace(qvar[0], str(lvar[qvar[0]]))                 
+            reset_error_msg()
+            variables = []
+            for textBox in textBoxes:
+                variables.append(textBox.get())
+            s_equation = get_equation(formula_node, searched_variable) 
+            i2 = 0
+            for qvar in lvar.items():
+                lvar[qvar[0]] = variables[i2]
+                i2 += 1
+                if ("^" in lvar[qvar[0]]):
+                    lvar[qvar[0]] = lvar[qvar[0]].replace("^", "**")       
+                if ("E" in lvar[qvar[0]]):
+                    lvar[qvar[0]] = lvar[qvar[0]].replace("E", "* 10**")
+                s_equation = s_equation.replace(qvar[0], str(lvar[qvar[0]]))                 
+            
+            try: 
+                ans = eval(s_equation)
+                if(ans >= 10000 or ans < 0.001):
+                   s_answer = '%.2E' % Decimal(ans)
+                else:
+                   s_answer = str(round(ans, 2))
+                string_answer = searched_variable + " has a value of " + s_answer + svar_unit
+                label_answer = Label(main, text=string_answer, font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
+                global lastVariables
+                tvar = get_attrib(root, "text", "var", "name")
+                txtToAdd = tvar[searched_variable] + " = " + s_answer + svar_unit
+                lastVariables.append(txtToAdd)
             except:
                 reset_error_msg()
-                error = Label(main, text = "Please enter a number", fg="red", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3) 
+                error = Label(main, text = "Please enter a number", fg="red", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
             
-            ans = eval(s_equation)
-            if(ans >= 10000 or ans < 0.001):
-               s_answer = '%.2E' % Decimal(ans)
-            else:
-               s_answer = str(round(ans, 2))
-            string_answer = searched_variable + " has a value of " + s_answer + svar_unit
-            label_answer = Label(main, text=string_answer, font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
-            global lastVariables
-            tvar = get_attrib(root, "text", "var", "name")
-            txtToAdd = tvar[searched_variable] + " = " + s_answer + svar_unit
-            lastVariables.append(txtToAdd)
-
         show_ans = Button(main, text='Show answer', command=show_answer, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=i + 1, column=1, sticky=W, pady=4)
     
     elif(len(items) > 1):
         i3 = 0
-        for i in range(0, len(items)):            
+        for i in range(0, len(items)):
+            form = get_attrib(root, "text", "function", "equation")       
             s_equation = get_equation(items[i], searched_variable)
+            s_equation = form[s_equation]
             text = str(i + 1) + " - " + s_equation
             equation = Button(main, text=text, command=lambda s=text: selectEquation(s, argVar), font="Consolas 10", borderwidth=3, relief="ridge", width=30)
             equation.grid(row=i3, column=1, sticky=W, pady=2)
@@ -217,9 +214,18 @@ def showVarList():
             col += 1
 
 def createHistoryButton():
-    history = Button(main, text="Previous answers", command=showHistory, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=0, column=20, sticky=W, padx=15)
-    menu = Button(main, text="Main menu", command=reset, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=0, column=21, sticky=W)
+    global lastVariables
+    if(len(lastVariables) != 0):
+        history = Button(main, text="Previous answers", command=showHistory, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=0, column=20, sticky=W, padx=15)
+        menu = Button(main, text="Main menu", command=reset, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=0, column=21, sticky=W)
+    else:
+        menu = Button(main, text="Main menu", command=reset, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=0, column=21, sticky=W, padx=15)
 
+def removeMenuBtn():
+    all_widgets = main.grid_slaves()
+    for widget in all_widgets:
+        if(widget.config("text")[-1] == "Main menu"):
+             widget.destroy()
 
 #----------------------------------------------------------------------CREATING THE GUI----------------------------------------------------------------------
 main = Tk()
@@ -228,6 +234,7 @@ main.iconbitmap("icon.ico")
 
 showVarList()
 createHistoryButton()
+removeMenuBtn()
 
 main.configure(background="#c2d1e8")
 
