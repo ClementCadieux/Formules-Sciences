@@ -113,7 +113,7 @@ def selectEquation(btnText, argVar):
             error = Label(main, text = "Please enter a number", fg="red", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3) 
             
         ans = eval(s_equation)
-        if(ans >= 10000 or ans < 0.005):
+        if(ans >= 10000 or ans < 0.001):
             s_answer = '%.2E' % Decimal(ans)
         else:
             s_answer = str(round(ans, 2))
