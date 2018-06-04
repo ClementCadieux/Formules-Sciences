@@ -67,14 +67,20 @@ def get_attrib (fnode, attribute, stype, key):
             dict_attribute_var[var_key] = var_attribute
     return (dict_attribute_var)
 
+nameToTxt = get_attrib(root, "text", "var", "name")
+txtToName = get_attrib(root, "name", "var", "text")
+
 def selectEquation(btnText, argVar):
-    text_to_name = get_attrib(root, "name", "var", "text")
-    searched_variable = text_to_name[argVar]
+    searched_variable = txtToName[argVar]
     items = formula_search(root, searched_variable)
     selected_equation = btnText[0]
     formula_node = items[int(selected_equation) - 1]
     lvar = list_variables(formula_node, searched_variable) 
-    svar_unit = get_unit(formula_node, searched_variable)
+    if(searched_variable == "q"):
+        svar_unit = get_unit(formula_node, searched_variable + "1")
+    else:
+        svar_unit = get_unit(formula_node, searched_variable)
+    
 
     all_widgets = main.grid_slaves()
     for widget in all_widgets:
@@ -85,7 +91,7 @@ def selectEquation(btnText, argVar):
     textBoxes = []
     for qvar in lvar.items():
         qvar_unit = get_unit(formula_node, qvar[0])
-        Label(main, text = "Enter the value of " + qvar[0] + " in " + qvar_unit + " : ", font="Consolas 10", bg="#c2d1e8").grid(row=i)
+        Label(main, text = "Enter the value of " + nameToTxt[qvar[0]] + " in " + qvar_unit + " : ", font="Consolas 10", bg="#c2d1e8").grid(row=i)
         varBox = Entry(main, font="Consolas 10", borderwidth=3, relief="sunken")
         varBox.grid(row=i, column=1)
         textBoxes.append(varBox)
@@ -113,11 +119,10 @@ def selectEquation(btnText, argVar):
                 s_answer = '%.2E' % Decimal(ans)
             else:
                 s_answer = str(round(ans, 2))
-            string_answer = searched_variable + " has a value of " + s_answer + svar_unit
+            string_answer = nameToTxt[searched_variable] + " has a value of " + s_answer + svar_unit
             label_answer = Label(main, text=string_answer, font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
             global lastVariables
-            tvar = get_attrib(root, "text", "var", "name")
-            txtToAdd = tvar[searched_variable] + " = " + s_answer + svar_unit
+            txtToAdd = nameToTxt[searched_variable] + " = " + s_answer + svar_unit
             lastVariables.append(txtToAdd)
         except:
             reset_error_msg()
@@ -133,8 +138,7 @@ def get_formula(argVar):
 
     createHistoryButton()
 
-    text_to_name = get_attrib(root, "name", "var", "text")
-    searched_variable = text_to_name[argVar]
+    searched_variable = txtToName[argVar]
     items = formula_search(root, searched_variable)
     
     if(len(items) == 1):
@@ -146,7 +150,7 @@ def get_formula(argVar):
         textBoxes = []
         for qvar in lvar.items():
             qvar_unit = get_unit(formula_node, qvar[0])
-            Label(main, text = "Enter the value of " + qvar[0] + " in " + qvar_unit + " : ", font="Consolas 10", bg="#c2d1e8").grid(row=i)
+            Label(main, text = "Enter the value of " + nameToTxt[qvar[0]] + " in " + qvar_unit + " : ", font="Consolas 10", bg="#c2d1e8").grid(row=i)
             varBox = Entry(main, font="Consolas 10", borderwidth=3, relief="sunken")
             varBox.grid(row=i, column=1)
             textBoxes.append(varBox)
@@ -174,11 +178,10 @@ def get_formula(argVar):
                    s_answer = '%.2E' % Decimal(ans)
                 else:
                    s_answer = str(round(ans, 2))
-                string_answer = searched_variable + " has a value of " + s_answer + svar_unit
+                string_answer = nameToTxt[searched_variable] + " has a value of " + s_answer + svar_unit
                 label_answer = Label(main, text=string_answer, font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
                 global lastVariables
-                tvar = get_attrib(root, "text", "var", "name")
-                txtToAdd = tvar[searched_variable] + " = " + s_answer + svar_unit
+                txtToAdd = nameToTxt[searched_variable] + " = " + s_answer + svar_unit
                 lastVariables.append(txtToAdd)
             except:
                 reset_error_msg()
@@ -200,18 +203,16 @@ def get_formula(argVar):
 def showVarList():
     row = 0
     col = 0
-    tvar = get_attrib(root, "text", "var", "name")
-    del(tvar["q1"])
-    del(tvar["q2"])
-    for key, value in tvar.items():             
-        text = tvar[key]
-        equation = Button(main, text=text, command=lambda s=text: get_formula(s), font="Consolas 10", borderwidth=3, relief="ridge", height=1, width=10)
-        equation.grid(row=row, column=col, sticky=W, pady=2, padx=2)
-        if(col > 4):
-            col = 0
-            row += 1
-        else:
-            col += 1
+    for key, value in nameToTxt.items():             
+        text = nameToTxt[key]
+        if(text != "q1" and text != "q2"):
+            equation = Button(main, text=text, command=lambda s=text: get_formula(s), font="Consolas 10", borderwidth=3, relief="ridge", height=1, width=10)
+            equation.grid(row=row, column=col, sticky=W, pady=2, padx=2)
+            if(col > 4):
+                col = 0
+                row += 1
+            else:
+                col += 1
 
 def createHistoryButton():
     global lastVariables
