@@ -68,6 +68,7 @@ def get_attrib (fnode, attribute, stype, key):
     return (dict_attribute_var)
 
 nameToTxt = get_attrib(root, "text", "var", "name")
+nameOfFunc = get_attrib(root, "name", "function", "name")
 txtToName = get_attrib(root, "name", "var", "text")
 
 def selectEquation(btnText, argVar):
@@ -76,10 +77,7 @@ def selectEquation(btnText, argVar):
     selected_equation = btnText[0]
     formula_node = items[int(selected_equation) - 1]
     lvar = list_variables(formula_node, searched_variable) 
-    if(searched_variable == "q"):
-        svar_unit = get_unit(formula_node, searched_variable + "1")
-    else:
-        svar_unit = get_unit(formula_node, searched_variable)
+    svar_unit = get_unit(formula_node, searched_variable)
     
 
     all_widgets = main.grid_slaves()
@@ -203,16 +201,15 @@ def get_formula(argVar):
 def showVarList():
     row = 0
     col = 0
-    for key, value in nameToTxt.items():             
+    for key, value in nameOfFunc.items():             
         text = nameToTxt[key]
-        if(text != "q1" and text != "q2"):
-            equation = Button(main, text=text, command=lambda s=text: get_formula(s), font="Consolas 10", borderwidth=3, relief="ridge", height=1, width=10)
-            equation.grid(row=row, column=col, sticky=W, pady=2, padx=2)
-            if(col > 4):
-                col = 0
-                row += 1
-            else:
-                col += 1
+        equation = Button(main, text=text, command=lambda s=text: get_formula(s), font="Consolas 10", borderwidth=3, relief="ridge", height=1, width=10)
+        equation.grid(row=row, column=col, sticky=W, pady=2, padx=2)
+        if(col > 4):
+            col = 0
+            row += 1
+        else:
+            col += 1
 
 def createHistoryButton():
     global lastVariables
