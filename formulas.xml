@@ -6,7 +6,7 @@
         <var name="r" unit="m" text="r"/>
         <var name="FE" unit="N" text="F.E."/>
         <function name="FE" equation="((9*(10**9))*q1*q2)/(r**2)" text="F.E.=(k⋅q1⋅q2)÷(r^2)"/>
-        <function name="q" equation="(FE*(r**2))/(9*(10**9)*q2)" text="q1=(F.E.⋅r^2)÷(k⋅q2)"/>
+        <function name="q1" equation="(FE*(r**2))/(9*(10**9)*q2)" text="q1=(F.E.⋅r^2)÷(k⋅q2)"/>
         <function name="r" equation="math.sqrt((9*(10**9)*q1*q2)/FE)" text="r=√((k⋅q1⋅q2)÷(F.E.))"/>
       </formula>
     <formula name="Tension électrique">
