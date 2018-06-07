@@ -116,6 +116,8 @@ def selectEquation(btnText, argVar):
                 s_answer = '%.2E' % Decimal(ans)
             else:
                 s_answer = str(round(ans, 2))
+            if(s_answer[-2:] == ".0"):
+                    s_answer = s_answer[:-2]
             string_answer = nameToTxt[searched_variable] + " has a value of " + s_answer + svar_unit
             label_answer = Label(main, text=string_answer, font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
             global lastVariables
@@ -175,6 +177,8 @@ def get_formula(argVar):
                    s_answer = '%.2E' % Decimal(ans)
                 else:
                    s_answer = str(round(ans, 2))
+                if(s_answer[-2:] == ".0"):
+                    s_answer = s_answer[:-2]
                 string_answer = nameToTxt[searched_variable] + " has a value of " + s_answer + svar_unit
                 label_answer = Label(main, text=string_answer, font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
                 global lastVariables
