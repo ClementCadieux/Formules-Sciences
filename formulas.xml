@@ -79,5 +79,13 @@
         <function name="q" equation="I*dt" text="q=I⋅Δt"/>
         <function name="dt" equation="q/I" text="Δt=q÷I"/>
     </formula>
+    <formula name="Rapport Conductance-Courant-Voltage">
+        <var name="G" unit="S" text="G"/>
+        <var name="I" unit="A" text="I"/>
+        <var name="U" unit="V" text="U"/>
+        <function name="G" equation="I/U" text="G=I÷U"/>
+        <function name="U" equation="I/G" text="U=I÷G"/>
+        <function name="I" equation="U*G" text="I=G⋅U"/>
+    </formula>
   </sciences>
 </formulas>
