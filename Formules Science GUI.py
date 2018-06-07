@@ -2,7 +2,6 @@ from tkinter import *
 from tkinter.messagebox import *
 import math
 from xml.etree import ElementTree as ET
-import re
 from decimal import Decimal
 
 #-----------------------------------------------------------------------MAIN VARIABLES-------------------------------------------------------------------------
@@ -229,6 +228,10 @@ def removeMenuBtn():
 main = Tk()
 main.title("Science Formulas")
 main.iconbitmap("icon.ico")
+
+Label(main, text = "Welcome to \"NAME\"", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=22)
+Label(main, text = "This is a little program made to help you study and do your homeworks faster.", font="Consolas 10", bg="#c2d1e8").grid(row=1, column=22, padx=15)
+Label(main, text = "To begin, choose a variable in the list.", font="Consolas 10", bg="#c2d1e8").grid(row=2, column=22)
 
 showVarList()
 createHistoryButton()
