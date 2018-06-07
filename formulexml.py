@@ -36,45 +36,53 @@ def get_attrib (fnode, attribute, stype, key):
 
 #---------------------------------------------------------------
 
-items = []
-formula_node = 0
+course = input("What course are you doing right now? Math or Science?")
 
-while (formula_node == 0):
-    searched_variable = input("What are you searching?")
-    items = formula_search(root, searched_variable)
-    if (len(items) == 0):
-        print("We don't have that variable")
-    elif(len(items) == 1):
-        formula_node = items[0]
-    elif(len(items) > 1):
-        for i in range(0, len(items)):
-            s_equation = get_equation(items[i], searched_variable)
-            print(str(i) + " " + s_equation)
-        selected_equation = input("Which formula do you want? 0 - " + str(len(items) - 1))
-        formula_node = items[int(selected_equation)]
-            
+if (course.lower() == "science"):
+    items = []
+    formula_node = 0
 
-lvar = list_variables(formula_node, searched_variable)
-s_equation = get_equation(formula_node, searched_variable)
-svar_unit = get_unit(formula_node, searched_variable)
-avar = get_attrib(root, "name", "var", "name")
-tvar = get_attrib(root, "text", "var", "name")
-text_to_name = get_attrib(root, "name", "var", "text")
+    while (formula_node == 0):
+        searched_variable = input("What are you searching?")
+        items = formula_search(root, searched_variable)
+        if (len(items) == 0):
+            print("We don't have that variable")
+        elif(len(items) == 1):
+            formula_node = items[0]
+        elif(len(items) > 1):
+            for i in range(0, len(items)):
+                s_equation = get_equation(items[i], searched_variable)
+                print(str(i) + " " + s_equation)
+            selected_equation = input("Which formula do you want? 0 - " + str(len(items) - 1))
+            formula_node = items[int(selected_equation)]
+                
 
-for qvar in lvar.items():
-    qvar_unit = get_unit(formula_node, qvar[0])
-    lvar[qvar[0]] = input("What is the value of " + qvar[0] + " in " + qvar_unit + "?")
-    if ("^" in lvar[qvar[0]]):
-        lvar[qvar[0]] = lvar[qvar[0]].replace("^", "**")       
-    if ("E" in lvar[qvar[0]]):
-        lvar[qvar[0]] = lvar[qvar[0]].replace("E", "* 10**")
-    s_equation = s_equation.replace(qvar[0], str(lvar[qvar[0]]))
+    lvar = list_variables(formula_node, searched_variable)
+    s_equation = get_equation(formula_node, searched_variable)
+    svar_unit = get_unit(formula_node, searched_variable)
+    avar = get_attrib(root, "name", "var", "name")
+    tvar = get_attrib(root, "text", "var", "name")
+    text_to_name = get_attrib(root, "name", "var", "text")
 
-answer = eval(s_equation)
+    for qvar in lvar.items():
+        qvar_unit = get_unit(formula_node, qvar[0])
+        lvar[qvar[0]] = input("What is the value of " + qvar[0] + " in " + qvar_unit + "?")
+        if ("^" in lvar[qvar[0]]):
+            lvar[qvar[0]] = lvar[qvar[0]].replace("^", "**")       
+        if ("E" in lvar[qvar[0]]):
+            lvar[qvar[0]] = lvar[qvar[0]].replace("E", "* 10**")
+        s_equation = s_equation.replace(qvar[0], str(lvar[qvar[0]]))
 
-if(answer >= 10000 or answer < 0.005):
-    s_answer = '%.2E' % Decimal(answer)
+    answer = eval(s_equation)
+
+    if(answer >= 10000 or answer < 0.005):
+        s_answer = '%.2E' % Decimal(answer)
+    else:
+        s_answer = str(round(answer, 2))
+
+    print(searched_variable + " has a value of " + s_answer + " " + svar_unit + ".")
+
+elif(course.lower() == "math"):
+    print("Sorry, this course is not available right now... It's coming soon!")
 else:
-    s_answer = str(round(answer, 2))
-
-print(searched_variable + " has a value of " + s_answer + " " + svar_unit + ".")
+    print("Sorry, this does not seem to be a course that we have. Maybe it's coming soon? Contact us for more details.")
