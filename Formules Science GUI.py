@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter.messagebox import *
+from tkinter.ttk import Separator, Style
 import math
 from xml.etree import ElementTree as ET
 from decimal import Decimal
@@ -191,6 +192,7 @@ def get_formula(argVar):
         show_ans = Button(main, text='Show answer', command=show_answer, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=i + 1, column=1, sticky=W, pady=4)
     
     elif(len(items) > 1):
+        Label(guide, text = "Good! Now choose the formula you want to use to find your variable.", font="Consolas 10", bg="#c2d1e8").grid(row=2, column=22)
         i3 = 0
         for i in range(0, len(items)):
             form = get_attrib(root, "text", "function", "equation")       
@@ -230,17 +232,22 @@ def removeMenuBtn():
 
 #----------------------------------------------------------------------CREATING THE GUI----------------------------------------------------------------------
 main = Tk()
-main.title("Science Formulas")
+main.title("Super Formulas")
 main.iconbitmap("icon.ico")
 
-Label(main, text = "Welcome to \"NAME\"", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=22)
-Label(main, text = "This is a little program made to help you study and do your homeworks faster.", font="Consolas 10", bg="#c2d1e8").grid(row=1, column=22, padx=15)
-Label(main, text = "To begin, choose a variable in the list.", font="Consolas 10", bg="#c2d1e8").grid(row=2, column=22)
+guide = Tk()
+guide.title("Super Formulas - Guide")
+guide.iconbitmap("icon.ico")
+
+Label(guide, text = "Welcome to \"Super Formulas\"", font="Consolas 10 bold underline", bg="#c2d1e8").grid(row=0, column=22)
+Label(guide, text = "This little program was made to help you study and do your homeworks faster.", font="Consolas 10", bg="#c2d1e8").grid(row=1, column=22)
+Label(guide, text = "To begin, use the list to choose the variable you want to find.", font="Consolas 10", bg="#c2d1e8").grid(row=2, column=22)
 
 showVarList()
 createHistoryButton()
 removeMenuBtn()
 
 main.configure(background="#c2d1e8")
+guide.configure(background="#c2d1e8")
 
 mainloop()
