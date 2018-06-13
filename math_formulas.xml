@@ -3,14 +3,14 @@
         <var name='a' text='a' unit=''/>
         <var name='b' text='b' unit=''/>
         <var name='c' text='c' unit=''/>
-        <function name='x' text='x=(-b±v((b)^2-4·a·c))÷(2·a)' equation='(-(b)±math.sqrt((b)**2-4*a*c))/(2*a)'/>
+        <function name='x' text='x=(-bÂ±âˆš((b)^2-4â‹…aâ‹…c))Ã·(2â‹…a)' equation='(-(b)Â±math.sqrt((b)**2-4*a*c))/(2*a)'/>
     </formula>
     <formula name='Loi des Cosinus'>
         <var name='a' text='a' unit=''/>
         <var name='b' text='b' unit=''/>
         <var name='c' text='c' unit=''/>
         <var name='C' text='C' unit=''/>
-        <function name='c' text='c=v(a^2+b^2-2·a·b·cos(C))' equation='math.sqrt(a**2+b**2-2*a*b*math.cos(C)'/>
-        <function name='C' text='C=cos-1((a^2+b^2-c^2)÷(2·a·b))' equation='math.acos((a»**2+b**2-c**2)/(2*a*b))'/>
+        <function name='c' text='c=v(a^2+b^2-2â‹…aâ‹…bâ‹…cos(C))' equation='math.sqrt(a**2+b**2-2*a*b*math.cos(C)'/>
+        <function name='C' text='C=cos-1((a^2+b^2-c^2)Ã·(2â‹…aâ‹…b))' equation='math.acos((a**2+b**2-c**2)/(2*a*b))'/>
     </formula>
 </math>
