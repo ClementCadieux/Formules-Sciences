@@ -4,10 +4,10 @@
         <var name="q1" unit="C" text="q1"/>
         <var name="q2" unit="C" text="q2"/>
         <var name="r" unit="m" text="r"/>
-        <var name="FE" unit="N" text="F.E."/>
-        <function name="FE" equation="((9*(10**9))*q1*q2)/(r**2)" text="F.E.=(k⋅q1⋅q2)÷(r^2)"/>
-        <function name="q1" equation="(FE*(r**2))/(9*(10**9)*q2)" text="q1=(F.E.⋅r^2)÷(k⋅q2)"/>
-        <function name="r" equation="math.sqrt((9*(10**9)*q1*q2)/FE)" text="r=√((k⋅q1⋅q2)÷(F.E.))"/>
+        <var name="Fe" unit="N" text="F.E."/>
+        <function name="Fe" equation="((9*(10**9))*q1*q2)/(r**2)" text="F.E.=(k⋅q1⋅q2)÷(r^2)"/>
+        <function name="q1" equation="(Fe*(r**2))/(9*(10**9)*q2)" text="q1=(F.E.⋅r^2)÷(k⋅q2)"/>
+        <function name="r" equation="math.sqrt((9*(10**9)*q1*q2)/Fe)" text="r=√((k⋅q1⋅q2)÷(F.E.))"/>
       </formula>
     <formula name="Tension électrique">
         <var name="U" unit="V" text="U"/>
@@ -92,8 +92,8 @@
         <var name="Spires" unit="" text="Spires"/>
         <var name="I" unit="A" text="I"/>
         <function name='Fe' equation="Spires*I" text='F.E=I⋅Spires'/>
-        <function name='I' equation='P/Spires' text='I=P÷Spires'/>
-        <function name='Spires' equation='P/I' text='Spires=P÷I'/>
+        <function name='I' equation='Fe/Spires' text='I=F.E÷Spires'/>
+        <function name='Spires' equation='Fe/I' text='Spires=F.E÷I'/>
     </formula>
     <formula name="Rapport molécules par mole">
         <var name='Mol' unit='' text='Mole'/>

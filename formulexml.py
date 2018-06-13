@@ -1,5 +1,5 @@
 from xml.etree import ElementTree as ET
-tree = ET.parse('formulas.xml')
+tree = ET.parse('sciences_formulas.xml')
 root = tree.getroot()
 
 
@@ -38,51 +38,51 @@ def get_attrib (fnode, attribute, stype, key):
 
 course = input("What course are you doing right now? Math or Science?")
 
-if (course.lower() == "science"):
-    items = []
-    formula_node = 0
+items = []
+formula_node = 0
 
-    while (formula_node == 0):
-        searched_variable = input("What are you searching?")
-        items = formula_search(root, searched_variable)
-        if (len(items) == 0):
-            print("We don't have that variable")
-        elif(len(items) == 1):
-            formula_node = items[0]
-        elif(len(items) > 1):
-            for i in range(0, len(items)):
-                s_equation = get_equation(items[i], searched_variable)
-                print(str(i) + " " + s_equation)
-            selected_equation = input("Which formula do you want? 0 - " + str(len(items) - 1))
-            formula_node = items[int(selected_equation)]
+while (formula_node == 0):
+    searched_variable = input("What are you searching?")
+    items = formula_search(root, searched_variable)
+    if (len(items) == 0):
+        print("We don't have that variable")
+    elif(len(items) == 1):
+        formula_node = items[0]
+    elif(len(items) > 1):
+        for i in range(0, len(items)):
+            s_equation = get_equation(items[i], searched_variable)
+            print(str(i) + " " + s_equation)
+        selected_equation = input("Which formula do you want? 0 - " + str(len(items) - 1))
+        formula_node = items[int(selected_equation)]
                 
 
-    lvar = list_variables(formula_node, searched_variable)
-    s_equation = get_equation(formula_node, searched_variable)
-    svar_unit = get_unit(formula_node, searched_variable)
-    avar = get_attrib(root, "name", "var", "name")
-    tvar = get_attrib(root, "text", "var", "name")
-    text_to_name = get_attrib(root, "name", "var", "text")
+lvar = list_variables(formula_node, searched_variable)
+s_equation = get_equation(formula_node, searched_variable)
+svar_unit = get_unit(formula_node, searched_variable)
+avar = get_attrib(root, "name", "var", "name")
+tvar = get_attrib(root, "text", "var", "name")
+text_to_name = get_attrib(root, "name", "var", "text")
 
-    for qvar in lvar.items():
-        qvar_unit = get_unit(formula_node, qvar[0])
+for qvar in lvar.items():
+    qvar_unit = get_unit(formula_node, qvar[0])
+    if (qvar_unit != ""):
         lvar[qvar[0]] = input("What is the value of " + qvar[0] + " in " + qvar_unit + "?")
-        if ("^" in lvar[qvar[0]]):
-            lvar[qvar[0]] = lvar[qvar[0]].replace("^", "**")       
-        if ("E" in lvar[qvar[0]]):
-            lvar[qvar[0]] = lvar[qvar[0]].replace("E", "* 10**")
-        s_equation = s_equation.replace(qvar[0], str(lvar[qvar[0]]))
+    elif (qvar_unit == ""):
+        lvar[qvar[0]] = input("What is the value of " + qvar[0] + "?")
+    if ("^" in lvar[qvar[0]]):
+        lvar[qvar[0]] = lvar[qvar[0]].replace("^", "**")       
+    if ("E" in lvar[qvar[0]]):
+        lvar[qvar[0]] = lvar[qvar[0]].replace("E", "* 10**")
+    s_equation = s_equation.replace(qvar[0], str(lvar[qvar[0]]))
 
-    answer = eval(s_equation)
+answer = eval(s_equation)
 
-    if(answer >= 10000 or answer < 0.005):
-        s_answer = '%.2E' % Decimal(answer)
-    else:
-        s_answer = str(round(answer, 2))
-
-    print(searched_variable + " has a value of " + s_answer + " " + svar_unit + ".")
-
-elif(course.lower() == "math"):
-    print("Sorry, this course is not available right now... It's coming soon!")
+if(answer >= 10000 or answer < 0.005):
+    s_answer = '%.2E' % Decimal(answer)
 else:
-    print("Sorry, this does not seem to be a course that we have. Maybe it's coming soon? Contact us for more details.")
+    s_answer = str(round(answer, 2))
+
+if (svar_unit != ""):
+    print(searched_variable + " has a value of " + s_answer + " " + svar_unit + ".")
+elif (svar_unit == ""):
+    print(searched_variable + " has a value of " + s_answer + ".")
