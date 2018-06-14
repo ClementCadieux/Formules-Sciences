@@ -3,7 +3,7 @@
         <var name='a' text='a' unit=''/>
         <var name='b' text='b' unit=''/>
         <var name='c' text='c' unit=''/>
-        <var name='x' text='c' unit=''/>
+        <var name='x' text='x' unit=''/>
         <function name='x' text='x=(-b±√((b)^2-4⋅a⋅c))÷(2⋅a)' equation='(-(b)±math.sqrt((b)**2-4*a*c))/(2*a)'/>
     </formula>
     <formula name='Loi des Cosinus'>
@@ -13,5 +13,15 @@
         <var name='C' text='C' unit='°'/>
         <function name='c' text='c=√(a^2+b^2-2⋅a⋅b⋅cos(C))' equation='math.sqrt(a**2+b**2-2*a*b*math.cos(C))'/>
         <function name='C' text='C=cos-1((a^2+b^2-c^2)÷(2⋅a⋅b))' equation='math.acos((a**2+b**2-c**2)/(2*a*b))'/>
+    </formula>
+    <formula name="Loi des Sinus">
+        <var name="A" text='A' unit="°"/>
+        <var name="a" text="a" unit=""/>
+        <var name="B" text="B" unit="°"/>
+        <var name="b" text="b" unit=""/>
+        <function name="A" text="A=sin-1((a*sinB)÷b)" equation="math.asin(((a*math.sin(B))/b)"/>
+        <function name="a" text="a=(b*sinA)÷sinB" equation="(b*math.sin(A))/math.sin(B)"/>
+        <function name="B" text="A=sin-1((a*sinB)÷b)" equation="math.asin(((b*math.sin(A))/a)"/>
+        <function name="b" text="b=(a*sinB)÷sinA" equation="(a*math.sin(B))/math.sin(A)"/>
     </formula>
 </math>
