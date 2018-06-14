@@ -89,11 +89,11 @@
     </formula>
     <formula name="Force d'attraction entre deux électro-aimant">
         <var name="Fe" unit="N" text="F.E"/>
-        <var name="Spires" unit="" text="Spires"/>
+        <var name="Ns" unit="" text="Spires"/>
         <var name="I" unit="A" text="I"/>
-        <function name='Fe' equation="Spires*I" text='F.E=I⋅Spires'/>
-        <function name='I' equation='Fe/Spires' text='I=F.E÷Spires'/>
-        <function name='Spires' equation='Fe/I' text='Spires=F.E÷I'/>
+        <function name='Fe' equation="Ns*I" text='F.E=I⋅Spires'/>
+        <function name='I' equation='Fe/Ns' text='I=F.E÷Spires'/>
+        <function name='Ns' equation='Fe/I' text='Spires=F.E÷I'/>
     </formula>
     <formula name="Rapport molécules par mole">
         <var name='Mol' unit='' text='Mole'/>
