@@ -1,12 +1,11 @@
 from tkinter import *
 from tkinter.messagebox import *
-from tkinter.ttk import Separator, Style
 import math
 from xml.etree import ElementTree as ET
 from decimal import Decimal
 
-#-----------------------------------------------------------------------MAIN VARIABLES-------------------------------------------------------------------------
-tree = ET.parse('formulas.xml')  
+#-----------------------------------------------------------------------MAIN VARIABLES----------------------------------------------------------------------
+tree = ET.parse('math_formulas.xml')  
 root = tree.getroot()
 items = []
 lastVariables = []
@@ -31,8 +30,7 @@ def reset():
     for widget in all_widgets:
         widget.destroy()
     createHistoryButton()
-    removeMenuBtn()
-    showVarList()
+    showCourseList()
 
 def reset_error_msg():
     all_widgets = main.grid_slaves()
@@ -67,10 +65,12 @@ def get_attrib (fnode, attribute, stype, key):
             dict_attribute_var[var_key] = var_attribute
     return (dict_attribute_var)
 
+#------------------------------------------------------------------------DICTIONARIES-------------------------------------------------------------------------
 nameToTxt = get_attrib(root, "text", "var", "name")
 nameOfFunc = get_attrib(root, "name", "function", "name")
 txtToName = get_attrib(root, "name", "var", "text")
 
+#-----------------------------------------------------------------------MAIN FUNCTIONS-------------------------------------------------------------------------
 def selectEquation(btnText, argVar):
     searched_variable = txtToName[argVar]
     items = formula_search(root, searched_variable)
@@ -89,7 +89,10 @@ def selectEquation(btnText, argVar):
     textBoxes = []
     for qvar in lvar.items():
         qvar_unit = get_unit(formula_node, qvar[0])
-        Label(main, text = "Enter the value of " + nameToTxt[qvar[0]] + " in " + qvar_unit + " : ", font="Consolas 10", bg="#c2d1e8").grid(row=i)
+        if (qvar_unit != ""):
+            Label(main, text = "Enter the value of " + nameToTxt[qvar[0]] + " in " + qvar_unit + " : ", font="Consolas 10", bg="#c2d1e8").grid(row=i)
+        else:
+            Label(main, text = "Enter the value of " + nameToTxt[qvar[0]] + " : ", font="Consolas 10", bg="#c2d1e8").grid(row=i)
         varBox = Entry(main, font="Consolas 10", borderwidth=3, relief="sunken")
         varBox.grid(row=i, column=1)
         textBoxes.append(varBox)
@@ -119,7 +122,10 @@ def selectEquation(btnText, argVar):
                 s_answer = str(round(ans, 2))
             if(s_answer[-2:] == ".0"):
                     s_answer = s_answer[:-2]
-            string_answer = nameToTxt[searched_variable] + " has a value of " + s_answer + svar_unit
+            if (svar_unit != ""):
+                string_answer = nameToTxt[searched_variable] + " has a value of " + s_answer + svar_unit
+            else:
+                string_answer = nameToTxt[searched_variable] + " has a value of " + s_answer
             label_answer = Label(main, text=string_answer, font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
             global lastVariables
             txtToAdd = nameToTxt[searched_variable] + " = " + s_answer + svar_unit
@@ -150,7 +156,10 @@ def get_formula(argVar):
         textBoxes = []
         for qvar in lvar.items():
             qvar_unit = get_unit(formula_node, qvar[0])
-            Label(main, text = "Enter the value of " + nameToTxt[qvar[0]] + " in " + qvar_unit + " : ", font="Consolas 10", bg="#c2d1e8").grid(row=i)
+            if (qvar_unit != ""):
+                Label(main, text = "Enter the value of " + nameToTxt[qvar[0]] + " in " + qvar_unit + " : ", font="Consolas 10", bg="#c2d1e8").grid(row=i)
+            else:
+                Label(main, text = "Enter the value of " + nameToTxt[qvar[0]] + " : ", font="Consolas 10", bg="#c2d1e8").grid(row=i)
             varBox = Entry(main, font="Consolas 10", borderwidth=3, relief="sunken")
             varBox.grid(row=i, column=1)
             textBoxes.append(varBox)
@@ -180,7 +189,10 @@ def get_formula(argVar):
                    s_answer = str(round(ans, 2))
                 if(s_answer[-2:] == ".0"):
                     s_answer = s_answer[:-2]
-                string_answer = nameToTxt[searched_variable] + " has a value of " + s_answer + svar_unit
+                if (svar_unit != ""):    
+                    string_answer = nameToTxt[searched_variable] + " has a value of " + s_answer + svar_unit
+                else:
+                    string_answer = nameToTxt[searched_variable] + " has a value of " + s_answer
                 label_answer = Label(main, text=string_answer, font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
                 global lastVariables
                 txtToAdd = nameToTxt[searched_variable] + " = " + s_answer + svar_unit
@@ -192,6 +204,7 @@ def get_formula(argVar):
         show_ans = Button(main, text='Show answer', command=show_answer, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=i + 1, column=1, sticky=W, pady=4)
     
     elif(len(items) > 1):
+        emptyGuide()
         Label(guide, text = "Good! Now choose the formula you want to use to find your variable.", font="Consolas 10", bg="#c2d1e8").grid(row=2, column=22)
         i3 = 0
         for i in range(0, len(items)):
@@ -203,7 +216,24 @@ def get_formula(argVar):
             equation.grid(row=i3, column=1, sticky=W, pady=2)
             i3 += 1   
 
-def showVarList():
+def showVarList(treeToUse):
+    emptyGuide()
+    Label(guide, text = "To continue, choose the variable you want to find.", font="Consolas 10", bg="#c2d1e8").grid(row=2, column=22)
+    createHistoryButton()
+    all_widgets = main.grid_slaves()
+    for widget in all_widgets:
+        widget.destroy()
+    createHistoryButton()
+    global tree
+    tree = ET.parse(treeToUse)
+    global root
+    root = tree.getroot()
+    global nameToTxt
+    nameToTxt = get_attrib(root, "text", "var", "name")
+    global nameOfFunc
+    nameOfFunc = get_attrib(root, "name", "function", "name")
+    global txtToName
+    txtToName = get_attrib(root, "name", "var", "text")
     row = 0
     col = 0
     for key, value in nameOfFunc.items():             
@@ -230,6 +260,18 @@ def removeMenuBtn():
         if(widget.config("text")[-1] == "Main menu"):
              widget.destroy()
 
+def showCourseList():
+    removeMenuBtn()
+    math = Button(main, text="Math (Sec. IV)", command=lambda s="math_formulas.xml": showVarList(s), font="Consolas 10", borderwidth=3, relief="ridge", height=1, width=18)
+    math.grid(row=0, column=0, sticky=W, pady=2, padx=2)
+    science = Button(main, text="Science (Sec. IV)", command=lambda s="sciences_formulas.xml": showVarList(s), font="Consolas 10", borderwidth=3, relief="ridge", height=1, width=18)
+    science.grid(row=0, column=1, sticky=W, pady=2, padx=2)
+
+def emptyGuide():
+    all_widgets = guide.grid_slaves()
+    for widget in all_widgets:
+        widget.destroy()
+
 #----------------------------------------------------------------------CREATING THE GUI----------------------------------------------------------------------
 main = Tk()
 main.title("Super Formulas")
@@ -241,9 +283,10 @@ guide.iconbitmap("icon.ico")
 
 Label(guide, text = "Welcome to \"Super Formulas\"", font="Consolas 10 bold underline", bg="#c2d1e8").grid(row=0, column=22)
 Label(guide, text = "This little program was made to help you study and do your homeworks faster.", font="Consolas 10", bg="#c2d1e8").grid(row=1, column=22)
-Label(guide, text = "To begin, use the list to choose the variable you want to find.", font="Consolas 10", bg="#c2d1e8").grid(row=2, column=22)
+Label(guide, text = "To begin, use the list to choose a course.", font="Consolas 10", bg="#c2d1e8").grid(row=2, column=22)
 
-showVarList()
+#showVarList()
+showCourseList()
 createHistoryButton()
 removeMenuBtn()
 
