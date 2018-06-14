@@ -1,13 +1,17 @@
 from xml.etree import ElementTree as ET
 
-course = input("""What course are you doing right now? 
-1-Science
-2-Math""")
+courses = {
+    1 : 'mathIV',
+    2 : 'sciencesIV'
+}
 
-if (course == "1"):
-    tree = ET.parse('sciences_formulas.xml')
-elif (course == "2"):
-    tree = ET.parse('math_formulas.xml')
+for i in range(1, (len(courses) + 1)):
+    course = courses[i]
+    print(str(i) + " " + course)
+
+course = int(input("Choose your course: 1 - " + str(len(courses))))
+
+tree = tree = ET.parse(courses[course] + "_formulas.xml")
 
 root = tree.getroot()
 
