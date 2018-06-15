@@ -24,4 +24,11 @@
         <function name="B" text="A=sin-1((a⋅sinB)÷b)" equation="math.asin(((b*math.sin(A))/a)"/>
         <function name="b" text="b=(a⋅sinB)÷sinA" equation="(a*math.sin(B))/math.sin(A)"/>
     </formula>
+    <formula name='Loi de Héron'>
+        <var name='a' text='a' unit=''/>
+        <var name='b' text='b' unit=''/>
+        <var name='c' text='c' unit=''/>
+        <var name='A' text='Aire' unit=''/>
+        <function name='A' text='A=√(p⋅(p-a)⋅(p-b)⋅(p-c))' function='math.sqrt(((a+b+c)/2)*(a+b)*(a+c)*(b+c))'/>
+    </formula>
 </math>
