@@ -5,7 +5,7 @@ from xml.etree import ElementTree as ET
 from decimal import Decimal
 
 #-----------------------------------------------------------------------MAIN VARIABLES----------------------------------------------------------------------
-tree = ET.parse('math_formulas.xml')  
+tree = ET.parse('mathIV_formulas.xml')  
 root = tree.getroot()
 items = []
 lastVariables = []
@@ -35,7 +35,7 @@ def reset():
 def reset_error_msg():
     all_widgets = main.grid_slaves()
     for widget in all_widgets:
-        if(widget.config("text")[-1] == "Please enter a number"):
+        if(widget.config("text")[-1] == "Please enter a number" or "has a value of" in (widget.config("text")[-1]) or widget.config("text")[-1] == "There is no possible value"):
             widget.destroy()
 
 def get_unit (fnode, svar):
@@ -87,6 +87,10 @@ def selectEquation(btnText, argVar):
 
     i = 0
     textBoxes = []
+    emptyGuide()
+    Label(guide, text = "To finish, enter the needed values and click \"Show Answer\"", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=22)
+    emptyLine(1)
+    expAndSciNot()
     for qvar in lvar.items():
         qvar_unit = get_unit(formula_node, qvar[0])
         if (qvar_unit != ""):
@@ -115,23 +119,34 @@ def selectEquation(btnText, argVar):
             s_equation = s_equation.replace(qvar[0], str(lvar[qvar[0]]))                 
            
         try: 
-            ans = eval(s_equation)
-            if(ans >= 10000 or ans < 0.001):
-                s_answer = '%.2E' % Decimal(ans)
-            else:
-                s_answer = str(round(ans, 2))
-            if(s_answer[-2:] == ".0"):
-                    s_answer = s_answer[:-2]
-            if (svar_unit != ""):
-                string_answer = nameToTxt[searched_variable] + " has a value of " + s_answer + svar_unit
-            else:
+            if ("±" not in s_equation):
+                ans = eval(s_equation)
+                s_answer = roundAndSciNot(ans)
                 string_answer = nameToTxt[searched_variable] + " has a value of " + s_answer
+            elif ("±" in s_equation):
+                answer1 = eval(s_equation.replace("±", "+"))
+                s_answer1 = roundAndSciNot(answer1)
+                answer2 = eval(s_equation.replace("±", "-"))
+                s_answer2 = roundAndSciNot(answer2)
+                if (answer1 != answer2):
+                    string_answer = nameToTxt[searched_variable] + " has a value of " + s_answer1 + " or " + s_answer2
+                else:
+                    string_answer = nameToTxt[searched_variable] + " has a value of " + s_answer1
+            string_answer = addUnit(string_answer, svar_unit)
             label_answer = Label(main, text=string_answer, font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
             global lastVariables
-            txtToAdd = nameToTxt[searched_variable] + " = " + s_answer + svar_unit
+            try:
+                txtToAdd = nameToTxt[searched_variable] + " = " + s_answer + svar_unit
+            except:
+                if(s_answer2 == s_answer1):
+                    txtToAdd = nameToTxt[searched_variable] + " = " + s_answer1 + svar_unit
+                else:
+                    txtToAdd = nameToTxt[searched_variable] + " = " + s_answer1 + " or " + s_answer2 + svar_unit
             lastVariables.append(txtToAdd)
-        except:
+        except ValueError:
             reset_error_msg()
+            error = Label(main, text = "There is no possible value", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
+        except NameError:
             error = Label(main, text = "Please enter a number", fg="red", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3) 
 
     show_ans = Button(main, text='Show answer', command=show_answer, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=i + 1, column=1, sticky=W, pady=4)
@@ -154,6 +169,10 @@ def get_formula(argVar):
 
         i = 0
         textBoxes = []
+        emptyGuide()
+        Label(guide, text = "To finish, enter the needed values and click \"Show Answer\"", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=22)
+        emptyLine(1)
+        expAndSciNot()
         for qvar in lvar.items():
             qvar_unit = get_unit(formula_node, qvar[0])
             if (qvar_unit != ""):
@@ -172,6 +191,8 @@ def get_formula(argVar):
                 variables.append(textBox.get())
             s_equation = get_equation(formula_node, searched_variable) 
             i2 = 0
+            sOp1 = r"((?<=[^a-zA-Z])|^)"
+            sOp2 = r"(?=[^a-zA-Z$]|$)"
             for qvar in lvar.items():
                 lvar[qvar[0]] = variables[i2]
                 i2 += 1
@@ -179,26 +200,38 @@ def get_formula(argVar):
                     lvar[qvar[0]] = lvar[qvar[0]].replace("^", "**")       
                 if ("E" in lvar[qvar[0]]):
                     lvar[qvar[0]] = lvar[qvar[0]].replace("E", "* 10**")
-                s_equation = s_equation.replace(qvar[0], str(lvar[qvar[0]]))                 
+                regex = sOp1 + qvar[0] + sOp2
+                s_equation = re.sub(regex, str(lvar[qvar[0]]), s_equation)                 
             
             try: 
-                ans = eval(s_equation)
-                if(ans >= 10000 or ans < 0.001):
-                   s_answer = '%.2E' % Decimal(ans)
-                else:
-                   s_answer = str(round(ans, 2))
-                if(s_answer[-2:] == ".0"):
-                    s_answer = s_answer[:-2]
-                if (svar_unit != ""):    
-                    string_answer = nameToTxt[searched_variable] + " has a value of " + s_answer + svar_unit
-                else:
+                if ("±" not in s_equation):
+                    ans = eval(s_equation)
+                    s_answer = roundAndSciNot(ans)
                     string_answer = nameToTxt[searched_variable] + " has a value of " + s_answer
+                elif ("±" in s_equation):
+                    answer1 = eval(s_equation.replace("±", "+"))
+                    s_answer1 = roundAndSciNot(answer1)
+                    answer2 = eval(s_equation.replace("±", "-"))
+                    s_answer2 = roundAndSciNot(answer2)
+                    if (answer1 != answer2):
+                        string_answer = nameToTxt[searched_variable] + " has a value of " + s_answer1 + " or " + s_answer2
+                    else:
+                        string_answer = nameToTxt[searched_variable] + " has a value of " + s_answer1
+                string_answer = addUnit(string_answer, svar_unit)
                 label_answer = Label(main, text=string_answer, font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
                 global lastVariables
-                txtToAdd = nameToTxt[searched_variable] + " = " + s_answer + svar_unit
+                try:
+                    txtToAdd = nameToTxt[searched_variable] + " = " + s_answer + svar_unit
+                except:
+                    if(s_answer2 == s_answer1):
+                        txtToAdd = nameToTxt[searched_variable] + " = " + s_answer1 + svar_unit
+                    else:
+                        txtToAdd = nameToTxt[searched_variable] + " = " + s_answer1 + " or " + s_answer2 + svar_unit
                 lastVariables.append(txtToAdd)
-            except:
+            except ValueError:
                 reset_error_msg()
+                error = Label(main, text = "There is no possible value", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
+            except NameError:
                 error = Label(main, text = "Please enter a number", fg="red", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
             
         show_ans = Button(main, text='Show answer', command=show_answer, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=i + 1, column=1, sticky=W, pady=4)
@@ -262,15 +295,41 @@ def removeMenuBtn():
 
 def showCourseList():
     removeMenuBtn()
-    math = Button(main, text="Math (Sec. IV)", command=lambda s="math_formulas.xml": showVarList(s), font="Consolas 10", borderwidth=3, relief="ridge", height=1, width=18)
+    math = Button(main, text="Math (Sec. IV)", command=lambda s="mathIV_formulas.xml": showVarList(s), font="Consolas 10", borderwidth=3, relief="ridge", height=1, width=18)
     math.grid(row=0, column=0, sticky=W, pady=2, padx=2)
-    science = Button(main, text="Science (Sec. IV)", command=lambda s="sciences_formulas.xml": showVarList(s), font="Consolas 10", borderwidth=3, relief="ridge", height=1, width=18)
+    science = Button(main, text="Science (Sec. IV)", command=lambda s="sciencesIV_formulas.xml": showVarList(s), font="Consolas 10", borderwidth=3, relief="ridge", height=1, width=18)
     science.grid(row=0, column=1, sticky=W, pady=2, padx=2)
 
 def emptyGuide():
     all_widgets = guide.grid_slaves()
     for widget in all_widgets:
         widget.destroy()
+    doNotCloseGuide()
+
+def doNotCloseGuide():
+    emptyLine(4)
+    Label(guide, text = "Do not close this guide.", font="Consolas 10 bold italic", bg="#c2d1e8").grid(row=5, column=22)
+
+def emptyLine(row):
+    Label(guide, text = " ", font="Consolas 10", bg="#c2d1e8").grid(row=row, column=22)
+
+def expAndSciNot():
+    Label(guide, text = "To enter an exponent, just put ^ between your number and exponent (ex: 2^2 = 4).", font="Consolas 10", bg="#c2d1e8").grid(row=2, column=22)
+    Label(guide, text = "To enter a value in scientific notation, enter E instead of x10^ (ex: 10E5 = 100000).", font="Consolas 10", bg="#c2d1e8").grid(row=3, column=22) 
+
+def roundAndSciNot(ans):
+    if(ans >= 10000 or ans < 0.001):
+        s_answer = '%.2E' % Decimal(ans)
+    else:
+        s_answer = str(round(ans, 2))
+    if(s_answer[-2:] == ".0"):
+        s_answer = s_answer[:-2]
+    return s_answer
+
+def addUnit(string_answer, svar_unit):
+    if(svar_unit != ""):    
+        string_answer = string_answer + svar_unit
+    return string_answer
 
 #----------------------------------------------------------------------CREATING THE GUI----------------------------------------------------------------------
 main = Tk()
@@ -284,8 +343,8 @@ guide.iconbitmap("icon.ico")
 Label(guide, text = "Welcome to \"Super Formulas\"", font="Consolas 10 bold underline", bg="#c2d1e8").grid(row=0, column=22)
 Label(guide, text = "This little program was made to help you study and do your homeworks faster.", font="Consolas 10", bg="#c2d1e8").grid(row=1, column=22)
 Label(guide, text = "To begin, use the list to choose a course.", font="Consolas 10", bg="#c2d1e8").grid(row=2, column=22)
+doNotCloseGuide()
 
-#showVarList()
 showCourseList()
 createHistoryButton()
 removeMenuBtn()
