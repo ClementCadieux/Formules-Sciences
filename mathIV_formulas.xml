@@ -29,6 +29,6 @@
         <var name='b' text='b' unit=''/>
         <var name='c' text='c' unit=''/>
         <var name='A' text='Aire' unit=''/>
-        <function name='A' text='A=√(p⋅(p-a)⋅(p-b)⋅(p-c))' function='math.sqrt(((a+b+c)/2)*(a+b)*(a+c)*(b+c))'/>
+        <function name='A' text='A=√(p⋅(p-a)⋅(p-b)⋅(p-c))' equation='math.sqrt(((a+b+c)/2)*(a+b)*(a+c)*(b+c))'/>
     </formula>
 </math>

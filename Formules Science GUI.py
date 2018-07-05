@@ -109,6 +109,8 @@ def selectEquation(btnText, argVar):
             variables.append(textBox.get())
         s_equation = get_equation(formula_node, searched_variable) 
         i2 = 0
+        sOp1 = r"((?<=[^a-zA-Z])|^)"
+        sOp2 = r"(?=[^a-zA-Z$]|$)"
         for qvar in lvar.items():
             lvar[qvar[0]] = variables[i2]
             i2 += 1
@@ -116,8 +118,9 @@ def selectEquation(btnText, argVar):
                 lvar[qvar[0]] = lvar[qvar[0]].replace("^", "**")       
             if ("E" in lvar[qvar[0]]):
                 lvar[qvar[0]] = lvar[qvar[0]].replace("E", "* 10**")
-            s_equation = s_equation.replace(qvar[0], str(lvar[qvar[0]]))                 
-           
+            regex = sOp1 + qvar[0] + sOp2
+            s_equation = re.sub(regex, str(lvar[qvar[0]]), s_equation)                 
+        
         try: 
             if ("±" not in s_equation):
                 ans = eval(s_equation)
@@ -147,8 +150,8 @@ def selectEquation(btnText, argVar):
             reset_error_msg()
             error = Label(main, text = "There is no possible value", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
         except NameError:
-            error = Label(main, text = "Please enter a number", fg="red", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3) 
-
+            error = Label(main, text = "Please enter a number", fg="red", font="Consolas 10", bg="#c2d1e8").grid(row=0, column=3)
+        
     show_ans = Button(main, text='Show answer', command=show_answer, font="Consolas 10", borderwidth=3, relief="ridge").grid(row=i + 1, column=1, sticky=W, pady=4)
 
 def get_formula(argVar):
