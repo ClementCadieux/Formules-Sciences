@@ -31,4 +31,11 @@
         <var name='A' text='Aire' unit=''/>
         <function name='A' text='A=√(p⋅(p-a)⋅(p-b)⋅(p-c))' equation='math.sqrt(((a+b+c)/2)*(a+b)*(a+c)*(b+c))'/>
     </formula>
+    <formula name='Pythagore'>
+        <var name='a' text='Cathète' unit=''/>
+        <var name='b' text='Cathète' unit=''/>
+        <var name='c' text='Hypothénuse' unit=''/>
+        <function name='c' text='c=√(a^2+b^2)' equation='math.sqrt(a**2+b**2)'/>
+        <function name='a' text='a=√(c^2-b^2)' equation='math.sqrt(c**2-b**2)'/>
+    </formula>
 </math>
