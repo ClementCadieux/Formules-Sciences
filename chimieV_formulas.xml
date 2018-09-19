@@ -1,2 +1,13 @@
-<chimie>
+<?xml version="1.0"?>
+<chimie> 
+    <formula>
+        <var name="P" unit="kPa" text="P"/>
+        <var name="V" unit="L" text="V"/>
+        <var name="n" unit="mole(s)" text="n"/>
+        <var name="T" unit="K" text="T°"/>
+        <function name="P" equation="(n*T*8,31)/V" text="(n⋅T⋅8,31)÷V"/>
+        <function name="V" equation="(n*T*8,31)/P" text="(n⋅T⋅8,31)÷V"/>
+        <function name="n" equation="P*V/(T*8,31)" text="P⋅V÷(T⋅8,31)"/>
+        <function name="T" equation="P*V/(n*8,31)" text="P⋅V÷(n⋅8,31)"/>
+    </formula>
 </chimie>
