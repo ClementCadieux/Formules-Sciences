@@ -1,2 +1,8 @@
 <physique>
+    <formula>
+        <var name="Er" unit="%" text="Erreur relative"/>
+        <var name="Dm" unit="" text="Donnée mesurée"/>
+        <var name="Dr" unit="" text="Donnée réelle"/>
+        <function name="Er" equation="math.abs(Dm - Dr) / Dr" text="| Donnée mesurée - Donnée réelle | / Donnée réelle" />
+    </formula>
 </physique>
