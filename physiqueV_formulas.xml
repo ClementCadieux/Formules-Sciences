@@ -6,3 +6,5 @@
         <function name="Er" equation="math.abs(Dm - Dr) / Dr" text="| Donnée mesurée - Donnée réelle | / Donnée réelle" />
     </formula>
 </physique>
+
+<!-- https://jsonformatter.org/xml-editor -->
