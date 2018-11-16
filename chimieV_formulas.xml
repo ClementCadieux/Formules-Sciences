@@ -10,4 +10,6 @@
         <function name="n" equation="P*V/(T*8,31)" text="P⋅V÷(T⋅8,31)"/>
         <function name="T" equation="P*V/(n*8,31)" text="P⋅V÷(n⋅8,31)"/>
     </formula>
+    <formula>
+        <var name="P" unit="kPa" text>
 </chimie>
